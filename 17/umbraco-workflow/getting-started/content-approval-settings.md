@@ -139,7 +139,8 @@ The `HtmlEmailModel` contains the following fields:
 | Fields        | Data Type                 | Description                                                                                                       |
 | ------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------------- |
 | WorkflowType  | WorkflowType              | An `enum` value containing either 1 or 2 for Publish and Unpublish, respectively.                                  |
-| ScheduledDate | DateTime                  | If a scheduled date exists for the workflow, it is found here.                                                    |
+| ReleaseDate   | DateTime                  | If a scheduled release date exists for the workflow, it is found here.                                            |
+| ExpireDate    | DateTime                  | If a scheduled expiry date exists for the workflow, it is found here.                                             |
 | Summary       | IHtmlString               | A pre-generated representation of the current workflow state.                                                     |
 | CurrentTask   | WorkflowTaskViewModel     | The view model data for the current workflow task. Contains a lot of useful data, best explored via Intellisense. |
 | Instance      | WorkflowInstanceViewModel | The view model data for the current workflow. Best explored via Intellisense.                                     |
