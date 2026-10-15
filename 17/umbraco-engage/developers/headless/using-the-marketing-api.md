@@ -25,6 +25,10 @@ _Without providing the_ `External-Visitor-Id` _header, each registered pageview 
 If you want to bypass visitor-based segmentation and request a specific variant directly, use the [Forced-Segment header](forced-segment.md) instead.
 {% endhint %}
 
+{% hint style="info" %}
+If your frontend calls Umbraco from a server instead of the visitor's browser, also send the [Visitor-User-Agent header](visitor-user-agent.md). Without it, segments based on the visitor's device or browser do not match.
+{% endhint %}
+
 5. Repeat these steps for each page visit for a new or existing visitor.
 
 By tracking visitor behavior, Engage determines if the user meets criteria for segmenting, A/B testing, or applying personalization. Subsequent requests to the Umbraco content API then deliver personalized content.
@@ -90,7 +94,7 @@ The `externalVisitorId` is unique to this visitor and is to be used in subsequen
 Umbraco Engage gathers information about visitors based on their requests, extracting details from your request like HTTPContext.
 
 * **Client-side**: This version applies when you make an API call directly to Umbraco from your browser. In this case, all the request metadata, such as IP address, cookies, request headers, and so on, comes directly from your browser.
-* **Server-side**: If there is a server between the browser and Umbraco, like a NuxtJS server, the requests tracked are from the server rather than the browser. In this scenario, Umbraco Engage does not receive metadata from the end-client's requests. Instead, you can use the server version to add this additional metadata (headers, IP addresses, and so on) to your pageview tracking between the NuxtJS server and Umbraco.
+* **Server-side**: If there is a server between the browser and Umbraco, like a NuxtJS server, the requests tracked are from the server rather than the browser. In this scenario, Umbraco Engage does not receive metadata from the end-client's requests. Instead, you can use the server version to add this additional metadata (headers, IP addresses, and so on) to your pageview tracking between the NuxtJS server and Umbraco. For requests to the Content Delivery API and the segmentation endpoints, send the visitor's `User-Agent` in the [Visitor-User-Agent header](visitor-user-agent.md).
 
 ### Page Events
 
