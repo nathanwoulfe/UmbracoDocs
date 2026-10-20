@@ -211,14 +211,30 @@ To install CookieBot, insert the JavaScript tag provided by CookieBot into the `
 
 ### Tracking a Visitor's Initial Pageview
 
-Umbraco Engage does not actively track visitors until they have given their consent to the Cookiebot configuration. After the visitor consents, you need to **reload** the page to track the visit. If no reload is performed, the visitor's referrer and/or campaign information will not be tracked.
+Umbraco Engage does not actively track visitors until they have given their consent to the Cookiebot configuration. After the visitor consents, you need to register the current pageview. If you do not, the visitor's referrer and campaign information is not tracked.
 
-Use JavaScript to reload the page when consent is given by handling the **CookiebotOnAccept** event:
+Call `umbracoEngage.analytics.grantConsent()` when consent is given by handling the **CookiebotOnAccept** event:
 
 ```js
- window.location.reload();
+window.addEventListener("CookiebotOnAccept", function () {
+    if (Cookiebot.consent.statistics) {
+        umbracoEngage.analytics.grantConsent();
+    }
+});
 ```
 
-Calling the above method will preserve any referrers and query strings supplied in the current request. It results in Umbraco Engage processing the current page visit and visitor correctly.
+The function sends the page's `document.referrer` to Umbraco Engage. Umbraco Engage then does the following:
+
+* Re-evaluates the analytics permission using your `IModulePermissions` implementation.
+* Writes the visitor cookie on the response.
+* Registers the current pageview with the original referrer.
+
+The visitor stays on the current page, so no reload is needed.
+
+{% hint style="warning" %}
+Do not reload the page after consent. A reload makes the browser send the site's own URL as the referrer. The visitor's real traffic source is then lost.
+{% endhint %}
+
+Umbraco Engage ignores the call when the visitor already has a visitor cookie, so repeated calls do not register duplicate pageviews. The call is also ignored when analytics consent is not granted, the visitor's IP address is excluded, or the request is blocked by a traffic filter.
 
 For more details, see the [Cookiebot Documentation](https://www.cookiebot.com/en/developer/#h-event-handling).
